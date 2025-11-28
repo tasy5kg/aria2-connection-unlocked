@@ -72,18 +72,27 @@ jobs:
       - name: Get Current Date
         run: echo "BUILD_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      - name: Apply Max Connection Patch
+      - name: Patch Max Connection
         run: |
           echo "Patching connection limit in src/OptionHandlerFactory.cc..."
           sed -i "s/\"1\", 1, 16, 'x'/\"1\", 1, 2147483647, 'x'/g" src/OptionHandlerFactory.cc
           echo "Verify patch here:"
           grep -C 2 "PREF_MAX_CONNECTION_PER_SERVER" src/OptionHandlerFactory.cc
 
-      - name: Apply gmplib.org Link Patch
+      - name: Patch Dockerfile
         run: |
-          # Unable to download files from gmplib.org via GitHub Actions
           echo "Replacing the gmplib.org link with GNU FTP mirror in Dockerfile.mingw..."
+          # Unable to download files from gmplib.org via GitHub Actions, patch url here
           sed -i 's|https://gmplib.org/download/gmp/|https://ftp.gnu.org/gnu/gmp/|g' Dockerfile.mingw
+
+          echo "Patching the Dockerfile to use the local source..."
+          sed -i '/ADD https:\/\/api.github.com/,$d' Dockerfile.mingw
+          cat <<EOF >> Dockerfile.mingw
+          COPY . /aria2
+          WORKDIR /aria2
+          RUN autoreconf -i && ./mingw-config && make -j\$(nproc) && \\
+              \$HOST-strip src/aria2c.exe
+          EOF
 
       - name: Build Windows x64 Binary
         run: |
