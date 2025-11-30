@@ -1,4 +1,5 @@
-> #### **English** | [简体中文](#lang-zh-CN) <a id="lang-en"></a>
+<a id="lang-en"></a>
+> #### **English** | [简体中文](#lang-zh-CN)
 ## aria2-connection-unlocked
 [![Auto-Sync Patch & Build (Windows x64)](https://github.com/tasy5kg/aria2-unlocked/actions/workflows/auto-sync-patch-build-windows-x64.yml/badge.svg)](https://github.com/tasy5kg/aria2-unlocked/actions/workflows/auto-sync-patch-build-windows-x64.yml)
 
@@ -10,7 +11,8 @@ This repository builds [aria2/aria2](https://github.com/aria2/aria2/tree/master)
 Click [**Releases**](../../releases/latest) to download the latest build of `aria2c.exe`.
 
 ---
-> #### [English](#lang-en) | **简体中文** <a id="lang-zh-CN"></a>
+<a id="lang-zh-CN"></a>
+> #### [English](#lang-en) | **简体中文**
 ## aria2 - 连接数解锁版
 [![Auto-Sync Patch & Build (Windows x64)](https://github.com/tasy5kg/aria2-unlocked/actions/workflows/auto-sync-patch-build-windows-x64.yml/badge.svg)](https://github.com/tasy5kg/aria2-unlocked/actions/workflows/auto-sync-patch-build-windows-x64.yml)
 
