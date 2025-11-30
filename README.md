@@ -1,4 +1,6 @@
-> #### **English** | [简体中文](#aria2---连接数解锁版)
+<a id="lang-en"></a>
+
+> #### **English** | [简体中文](#lang-zh-CN)
 
 ## aria2-connection-unlocked
 
@@ -16,7 +18,9 @@ Click [**Releases**](../../releases/latest) to download the latest build of `ari
 
 ---
 
-> #### [English](#aria2-connection-unlocked) | **简体中文**
+<a id="lang-zh-CN"></a>
+
+> #### [English](#lang-en) | **简体中文**
 
 ## aria2 - 连接数解锁版
 
