@@ -36,28 +36,26 @@ jobs:
           git remote add upstream https://github.com/aria2/aria2.git
           git fetch upstream master
 
-          # Get commit hashes
-          LOCAL_HASH=$(git rev-parse HEAD)
-          UPSTREAM_HASH=$(git rev-parse upstream/master)
+          # Check for new commits in upstream that are not in local
+          # HEAD..upstream/master lists commits reachable from upstream but not HEAD
+          UPDATES_COUNT=$(git rev-list HEAD..upstream/master --count)
           SHORT_SHA=$(git rev-parse --short upstream/master)
 
-          echo "Local hash: $LOCAL_HASH"
-          echo "Upstream hash: $UPSTREAM_HASH"
+          echo "Updates count from upstream: $UPDATES_COUNT"
 
-          # Compare hashes to check for updates
-          if [ "$LOCAL_HASH" != "$UPSTREAM_HASH" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "Updates found or manual trigger detected."
-            
+          # Only run if there are updates (count > 0) or if manually triggered
+          if [ "$UPDATES_COUNT" -gt 0 ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Updates found ($UPDATES_COUNT new commits) or manual trigger detected."
+          
             # Sync local master with upstream master
             git checkout master
             git merge upstream/master
             git push origin master
-            
             # Set output variables for the next job
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
           else
-            echo "No updates found."
+            echo "No updates found. Local is up-to-date or ahead of upstream."
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
