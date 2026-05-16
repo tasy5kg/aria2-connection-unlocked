@@ -252,8 +252,16 @@ int GnuTLSSession::tlsConnect(const std::string& hostname, TLSVersion& version,
   }
   if (tlsContext_->getVerifyPeer()) {
     // verify peer
+    gnutls_typed_vdata_st data[] = {
+        {
+            GNUTLS_DT_KEY_PURPOSE_OID,
+            reinterpret_cast<unsigned char*>(
+                const_cast<char*>(GNUTLS_KP_TLS_WWW_SERVER)),
+        },
+    };
     unsigned int status;
-    rv_ = gnutls_certificate_verify_peers2(sslSession_, &status);
+    rv_ = gnutls_certificate_verify_peers(
+        sslSession_, data, sizeof(data) / sizeof(data[0]), &status);
     if (rv_ != GNUTLS_E_SUCCESS) {
       return TLS_ERR_ERROR;
     }
@@ -277,6 +285,9 @@ int GnuTLSSession::tlsConnect(const std::string& hostname, TLSVersion& version,
       }
       if (status & GNUTLS_CERT_EXPIRED) {
         handshakeErr += " `expired'";
+      }
+      if (status & GNUTLS_CERT_PURPOSE_MISMATCH) {
+        handshakeErr += " `unsuitable certificate purpose`";
       }
       // TODO Add GNUTLS_CERT_SIGNATURE_FAILURE here
       if (!handshakeErr.empty()) {
